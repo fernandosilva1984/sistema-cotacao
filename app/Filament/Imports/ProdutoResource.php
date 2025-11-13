@@ -1,8 +1,9 @@
 <?php
+// app/Filament/Resources/ProdutoResource.php
+
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\ProdutoResource\Pages;
-use App\Filament\Resources\ProdutoResource\RelationManagers;
 use App\Models\Produto;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -114,13 +115,14 @@ class ProdutoResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ManageProduto::route('/'),
+            'index' => Pages\ListProdutos::route('/'),
+            'create' => Pages\CreateProduto::route('/create'),
+            'edit' => Pages\EditProduto::route('/{record}/edit'),
         ];
     }
 
     public static function getEloquentQuery(): Builder
-    
-        {
+    {
         $user = auth()->user();
         
         if ($user->is_master) {
@@ -129,5 +131,4 @@ class ProdutoResource extends Resource
         
         return parent::getEloquentQuery()->where('id_empresa', $user->id_empresa);
     }
-    
 }

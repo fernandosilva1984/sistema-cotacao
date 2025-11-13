@@ -34,7 +34,14 @@ class CotacaoResource extends Resource
                 Forms\Components\Section::make('Informações da Cotação')
                     ->schema([
                         Forms\Components\Select::make('fornecedores')
-                            ->relationship('fornecedores', 'nome')
+                            ->relationship(
+                                name: 'fornecedores',
+                                titleAttribute: 'nome',
+                                modifyQueryUsing: fn (Builder $query) => 
+                                    auth()->user()->is_master 
+                                        ? $query // Se for master, mostra todos
+                                        : $query->where('id_empresa', auth()->user()->id_empresa) // Se não, filtra por empresa
+                            )
                             ->label('Fornecedor(es)')
                             ->searchable()
                             ->preload()

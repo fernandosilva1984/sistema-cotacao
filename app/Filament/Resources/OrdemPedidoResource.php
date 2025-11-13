@@ -51,7 +51,14 @@ class OrdemPedidoResource extends Resource
                     ->schema([
                         Forms\Components\Select::make('id_cotacao')
                             ->label('Cotação')
-                            ->relationship('cotacao', 'numero')
+                            ->relationship(
+                                name: 'cotacao',
+                                titleAttribute: 'numero',
+                                modifyQueryUsing: fn (Builder $query) => 
+                                    auth()->user()->is_master 
+                                        ? $query // Se for master, mostra todos
+                                        : $query->where('id_empresa', auth()->user()->id_empresa) // Se não, filtra por empresa
+                            )
                             ->searchable()
                             ->preload()
                             ->required()
