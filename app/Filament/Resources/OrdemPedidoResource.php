@@ -233,7 +233,7 @@ class OrdemPedidoResource extends Resource
                                 $totalOrdens = count($ordens);
                                 
                                 if ($totalOrdens === 0) {
-                                    return 'Selecione itens acima para visualizar  sas ordens de pedido que serão criadas.';
+                                    return 'Selecione itens acima para visualizar as ordens de pedido que serão criadas.';
                                 }
                                 
                                 return "Serão criadas {$totalOrdens} ordem(ns) de pedido:";
