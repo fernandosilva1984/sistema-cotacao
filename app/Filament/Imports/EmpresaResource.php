@@ -1,4 +1,6 @@
 <?php
+// app/Filament/Resources/EmpresaResource.php
+
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\EmpresaResource\Pages;
@@ -123,11 +125,17 @@ class EmpresaResource extends Resource
         ];
     }
 
-
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ManageEmpresas::route('/'),
+            'index' => Pages\ListEmpresas::route('/'),
+            'create' => Pages\CreateEmpresa::route('/create'),
+            'edit' => Pages\EditEmpresa::route('/{record}/edit'),
         ];
+    }
+
+    public static function canViewAny(): bool
+    {
+        return auth()->user()->is_master;
     }
 }
