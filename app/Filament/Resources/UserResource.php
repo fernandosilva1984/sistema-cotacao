@@ -38,12 +38,25 @@ class UserResource extends Resource
                             ->email()
                             ->required()
                             ->maxLength(255),
-                        Forms\Components\TextInput::make('password')
+                        TextInput::make('password')
+                            ->label('Senha')
                             ->password()
-                            ->required()
+                            ->revealable()
+                            ->dehydrateStateUsing(fn ($state) => Hash::make($state))
+                            ->dehydrated(fn ($state) => filled($state))
+                            ->required(fn (string $context): bool => $context === 'create')
+                           // ->rule(Password::default())
                             ->maxLength(255)
-                            ->hiddenOn('edit')
-                            ->dehydrated(fn ($state) => filled($state)),
+                            ->same('password_confirmation') // Valida que é igual ao campo de confirmação
+                            ->live(onBlur: true), // Atualiza validação em tempo real
+                        TextInput::make('password_confirmation')
+                            ->label('Confirmar Senha')
+                            ->password()
+                            ->revealable()
+                            ->required(fn (string $context): bool => $context === 'create')
+                            ->maxLength(255)
+                            ->dehydrated(false)
+                            ->rule('required_with:password'),
                     ])->columns(2),
                 
                 Forms\Components\Section::make('Configurações')
